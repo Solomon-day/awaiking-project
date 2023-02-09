@@ -73,13 +73,13 @@ food = pd.read_csv("food1.csv")
 
 # Create a Plotly chart
 food_plotly = px.line(food, x="DATE", y="Expenditures", title='Expenditures/USD')
-fig_gas_usd.update_layout(template=CHARTS_TEMPLATE)
+food_plotly.update_layout(template=CHARTS_TEMPLATE)
 
 #####Раздел где формируется дата и график для рсходов в GOLD
 
 food_gold = pd.read_csv("food1.csv")
-food_gold_plotly = px.line(food_gold, x="DATE", y="Ratio_gd", title='Expenditures/GoldOZ')
-food_gold_plotly.update_layout(template=CHARTS_TEMPLATE)
+food_gold_plotly_1 = px.line(food_gold, x="DATE", y="Ratio_gd", title='Expenditures/GoldOZ')
+food_gold_plotly_1.update_layout(template=CHARTS_TEMPLATE)
 
 #####Раздел где формируется дата и график для нефти бакса
 
@@ -141,8 +141,8 @@ fig_gas_usd.update_layout(template=CHARTS_TEMPLATE)
 #####Раздел где формируется дата и график для рсходов в USD
 
 food = pd.read_csv("food1.csv")
-food_plotly_usd_1 = px.line(food, x="DATE", y="Expenditures", title='Expenditures/USD')
-food_plotly_usd_1.update_layout(template=CHARTS_TEMPLATE)
+food_plotly_usd_2 = px.line(food, x="DATE", y="Expenditures", title='Expenditures/USD')
+food_plotly_usd_2.update_layout(template=CHARTS_TEMPLATE)
 
 #####Раздел где формируется дата и график для рсходов в GOLD
 
@@ -299,5 +299,5 @@ app.layout = html.Div([
 ])
 
 if __name__ == '__main__':
-   #app.run_server(debug=True)
+   app.run_server(debug=True)
 
