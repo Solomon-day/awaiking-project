@@ -7,7 +7,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
-
+from dash import dash_table
 
 import plotly.io as poi
 
@@ -161,6 +161,17 @@ empresas_btc = [
     'NG=F',
     'BTC=F'
 ]
+####Раздел где формируется график и подготавливается дата для history gold price
+h_gold = pd.read_csv("GoldpriceData.csv")
+h_gold_plotly = px.line(h_gold, x="date", y="price", title='History GoldOZ/USD')
+h_gold_plotly.update_layout(template=CHARTS_TEMPLATE)
+####Раздел где формируется график и подгатавливается дата для history inflation rate
+h_inflation_rate = pd.read_csv("CPIrate.csv")
+h_inflation_rate_plotly = px.bar(h_inflation_rate, x="DATE", y="InflRate")
+h_inflation_rate_plotly.update_layout(template=CHARTS_TEMPLATE)
+
+####TableContent
+df_infl_rate_p_3 = pd.read_csv("inflation_rate_period3.csv")
 
 ####TabsContent
 tab1_gold = [
@@ -257,6 +268,33 @@ tab2_bitcoin = [
     #     html.Footer(["Footer"])
     # ])
 ]
+
+tab4_inflation = [
+
+    dbc.Row([
+        dcc.Graph(figure=h_gold_plotly),
+        html.Q('''На графике отображена динамика стоиомсти золота в долларах США.Примечательно то, что до отмены Бреттон-Вудской системы в ~1976 году цена на золото практически не изменялась.
+        Факт малой подвижности цены золота связан с инфляций, данные по которой приведены на графике ниже.''')
+    ]),
+    dbc.Row([
+        dcc.Graph(figure=h_inflation_rate_plotly),
+        html.Q('''Далее приводятся данные для Великобритании по причине того, что у Банка Англии есть в открытом доступе данные по инфляции с 1210 года.
+        Для периода классического золотого стандарта, который продлился до 1944 года характерны взаимопогашающиеся колебания инфляции.
+        Это означает, что если  инфляция за год "X" составила +2.3%, то в следующий год "Y" будет дефляция на уровне 2.3%. По скольку на инфляцию влияет множество внешних факторов, то
+        допустимы незначительные отклонения, однако, как будет видно из таблицы ниже период золотого стандарта прошел с околонулевыми значениями инфляции.
+        При этом в это время активно развивалось и сельское хозяйство и промышленность.''')
+    ]),
+    dbc.Row([
+
+        dash_table.DataTable(df_infl_rate_p_3.to_dict('records'), [{"name": i, "id": i} for i in df_infl_rate_p_3.columns]),
+        html.Q('''В таблице представлены три периода и указана средняя инфляция в процентах годовых для каждого из периодов.
+        Перед Бреттон-Вудом можно выделить еще один период под называнием: "золотослитковый стандарт", но он продлился недолго с 1925 по 1944 год, однако главной проблемой этой системы была неконтроллируемая возможность эмиссии (печати) новых денег,
+        которые не были обеспечены золотом, что в конечном итоге привело к краху британского фунта, как резервной валюты. На смену пришла резервная система с долларом США, который был обеспечен золотом и мог конвертироваться в него до 1971 года.
+        Из всех монетарных систем, стабильнее всего показала себя система классического золотого стандарта. В США с 1837 по 1862 год частные банки могли иметь свои банкноты, которые обязаны были держать обеспечение под выданные бумажные деньги''')
+    ])
+
+
+]
 tab3_about = [
     dbc.Row([html.Mark('''
     Проект создан, чтобы каждый мог наглядно увидеть выгоду если бы были частные деньги обеспеченные активами, как пример золотом или криптовалютой.
@@ -267,10 +305,12 @@ tab3_about = [
 ]
 ####Раздел со стилем
 '''LAYOUT'''
+
 app = dash.Dash(__name__,
                 external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 # Header
+#table_infl = dash_table.DataTable(df_infl_rate_p_3.to_dict('records'), [{"name": i, "id": i} for i in df_infl_rate_p_3.columns])
 
 app.layout = html.Div([
     dbc.Row([
@@ -289,6 +329,7 @@ app.layout = html.Div([
         dbc.Tabs([
             dbc.Tab(tab1_gold, label='*/Gold'),
             dbc.Tab(tab2_bitcoin, label='*/Bitcoin'),
+            dbc.Tab(tab4_inflation, label='Inflation'),
             dbc.Tab(tab3_about, label='About Pjct')
         ])
 
