@@ -3,8 +3,8 @@ import pandas as pd
 import plotly.express as px
 
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 from dash import dash_table
@@ -181,13 +181,15 @@ tab1_gold = [
             html.P('''Данный график показывает общие среднегодовые расходы американца (включая траты на ипотеку, здравоохранение, 
             крупные траты, повседневные траты и тд). Общий тренд графика говорит о том, что с каждым годом среднегодовые расходы
             американца в долларах растут.''')
-        ]),
+        ],
+         width={'size': 6}),
         dbc.Col([
             dcc.Graph(figure=food_gold_plotly_1),
             html.P('''Данный график, как и соседний, показывает общие среднегодовые расходы американца, но уже по отношению не к доллару, а к одной тройской унции золота(включая траты на ипотеку, здравоохранение, 
             крупные траты, повседневные траты и тд). То есть на графике отражено то, сколько унций золота требуется американцу в год, чтобы покрыть личные расходы.
             Общий тренд графика говорит о том, что с каждым годом среднегодовые расходы американца в золоте падают.''')
-        ])
+        ],
+            width={'size': 6})
 
     ]),
 
@@ -210,16 +212,15 @@ tab1_gold = [
         dbc.Col([
             dcc.Graph(figure=fig_clgc),
             html.P('''Данный график показывает динамику стоимости одного барреля нефти в унциях золота.''')
-        ]),
+        ],
+            width={'size': 6}),
         dbc.Col([
             dcc.Graph(figure=fig_oil_usd),
             html.P('''На графике Oil/USD отражена стоимость барреля нефти в долларах США .''')
-        ])
+        ],
+        width={'size': 6})
 
     ]),
-    # dbc.Row([
-    #     html.Footer(["Footer"])
-    # ])
 ]
 
 tab2_bitcoin = [
